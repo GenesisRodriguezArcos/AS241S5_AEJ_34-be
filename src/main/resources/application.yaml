@@ -1,0 +1,38 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: genesis
+  r2dbc:
+    url: r2dbc:postgresql://ep-soft-cell-acm9jqsu-pooler.sa-east-1.aws.neon.tech:5432/AplicacionesEmpresarialesEnJava
+    username: neondb_owner
+    password: npg_XRcY3MmzP2La
+    properties:
+      ssl: true
+      sslMode: require
+  flyway:
+    enabled: false
+
+logging:
+  level:
+    com.edu.pe.vallegrande.genesis: DEBUG
+    reactor.netty.http.client: DEBUG
+    io.netty.handler.ssl: DEBUG
+  file:
+    name: target/app.log
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+  api-docs:
+    path: /api-docs
+
+rapidapi:
+  key: e87273f53dmsh3de3d09f303e119p13951cjsn7854f8e30ece
+  face-detection:
+    host: face-detection14.p.rapidapi.com
+    url: https://face-detection14.p.rapidapi.com/v1/results
+  face-analyzer:
+    host: faceanalyzer-ai.p.rapidapi.com
+    url: https://faceanalyzer-ai.p.rapidapi.com
