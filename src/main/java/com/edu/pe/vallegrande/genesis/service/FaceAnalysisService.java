@@ -160,12 +160,12 @@ public class FaceAnalysisService {
     }
 
     public Mono<FaceAnalysis> disable(UUID id) {
-        return repository.findByIdAndStatus(id, "A")
+        return repository.findById(id)
                 .flatMap(existing -> { existing.setStatus("I"); return repository.save(existing); });
     }
 
     public Mono<FaceAnalysis> enable(UUID id) {
-        return repository.findByIdAndStatus(id, "I")
+        return repository.findById(id)
                 .flatMap(existing -> { existing.setStatus("A"); return repository.save(existing); });
     }
 }

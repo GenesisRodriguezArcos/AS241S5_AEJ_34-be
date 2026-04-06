@@ -25,8 +25,13 @@ logging:
 springdoc:
   swagger-ui:
     path: /swagger-ui.html
+    disable-swagger-default-url: true
+    url: /api-docs
   api-docs:
     path: /api-docs
+    enabled: true
+  webjars:
+    prefix: ""
 
 rapidapi:
   key: e87273f53dmsh3de3d09f303e119p13951cjsn7854f8e30ece

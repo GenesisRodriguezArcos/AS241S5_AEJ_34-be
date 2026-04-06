@@ -17,11 +17,23 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(RuntimeException.class)
     public Mono<ResponseEntity<Map<String, Object>>> handleRuntime(RuntimeException ex) {
         log.error("RuntimeException: {}", ex.getMessage());
-        return Mono.just(ResponseEntity.status(HttpStatus.BAD_GATEWAY).body(Map.of(
+
+        // Si el error viene de la API externa con 405, dar mensaje claro
+        String message = ex.getMessage() != null ? ex.getMessage() : "Error desconocido";
+        HttpStatus status = HttpStatus.BAD_GATEWAY;
+
+        if (message.contains("405")) {
+            message = "La API externa no soporta este método. Verifica la URL y el endpoint configurado.";
+        } else if (message.contains("404")) {
+            message = "Registro no encontrado.";
+            status = HttpStatus.NOT_FOUND;
+        }
+
+        return Mono.just(ResponseEntity.status(status).body(Map.of(
                 "timestamp", LocalDateTime.now().toString(),
-                "status", 502,
+                "status", status.value(),
                 "error", "Error al procesar la solicitud",
-                "message", ex.getMessage() != null ? ex.getMessage() : "Error desconocido"
+                "message", message
         )));
     }
 
