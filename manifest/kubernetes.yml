@@ -1,78 +1,89 @@
-# ✅ ENTORNO LOCAL - Docker Desktop
-# Asegúrate de tener Docker Desktop abierto y Kubernetes habilitado en Settings > Kubernetes
+# ✅ ENTORNO LOCAL - Docker Desktop / Minikube
+# ─────────────────────────────────────────────
 
-# ─────────────────────────────────────────────
-# 1. NAMESPACE - Crear el espacio de trabajo
-# ─────────────────────────────────────────────
+# consultar versión de minikube
+minikube version
+
+# consultar si minikube esta en start o stop
+minikube status
+
+# iniciar clúster kubernetes
+minikube start
+
+# ingresar a la carpeta de los manifiestos de kubernetes (manifest)
+cd manifest
+
+# listar namespace
+kubectl get namespace
+kubectl get ns
+
+# crear namespace
 kubectl apply -f genesis-rodriguez-34-namespace.yml
 
-# Verificar
-kubectl get namespace
-
-# Cambiar al namespace del proyecto
-kubectl config set-context --current --namespace=genesis-rodriguez-34-namespace
-
-# Consultar namespace activo | LINUX
+# consultar namespace en uso | LINUX
 kubectl config view --minify | grep namespace
 
-# Consultar namespace activo | WINDOWS
+# consultar namespace en uso | WINDOWS
 kubectl config view --minify | findstr namespace
 
-# ─────────────────────────────────────────────
-# 2. SECRET - Credenciales en Base64
-# ─────────────────────────────────────────────
+# cambiar namespace en uso a "genesis-rodriguez-34-namespace"
+kubectl config set-context --current --namespace=genesis-rodriguez-34-namespace
+
+# aplicar manifiestos en orden
 kubectl apply -f genesis-rodriguez-34-secret.yml
-
-# Verificar
-kubectl get secrets -n genesis-rodriguez-34-namespace
-
-# ─────────────────────────────────────────────
-# 3. CONFIGMAP - Variables en texto plano
-# ─────────────────────────────────────────────
 kubectl apply -f genesis-rodriguez-34-configmap.yml
-
-# Verificar
-kubectl get configmap -n genesis-rodriguez-34-namespace
-
-# ─────────────────────────────────────────────
-# 4. SERVICE - Manejo y asignación de puertos
-# ─────────────────────────────────────────────
 kubectl apply -f genesis-rodriguez-34-service.yml
-
-# Verificar
-kubectl get service -n genesis-rodriguez-34-namespace
-
-# ─────────────────────────────────────────────
-# 5. DEPLOYMENT - Despliegue de la aplicación
-# ─────────────────────────────────────────────
 kubectl apply -f genesis-rodriguez-34-deployment.yml
 
-# Verificar pods corriendo
-kubectl get pods -n genesis-rodriguez-34-namespace
+# consultar todos los recursos del namespace
+kubectl get all -n genesis-rodriguez-34-namespace
 
-# Consultar todos los recursos y secrets del namespace
+# consultar todos los recursos y secret del namespace
 kubectl get all,secrets -n genesis-rodriguez-34-namespace
 
-# ─────────────────────────────────────────────
-# 6. PROBAR EL MICROSERVICIO
-# ─────────────────────────────────────────────
+# listar services
+minikube service genesis-rodriguez-34-service -n genesis-rodriguez-34-namespace
+minikube service list
 
-# Crear túnel entre tu máquina local y el clúster
+# probar el microservicio dentro del clúster con curl
+curl http://192.168.49.2:30001/api/v1/face-detection
+curl http://192.168.49.2:30001/api/v1/face-analysis
+
+# crear un túnel de puerto entre la máquina local (host) y el clúster de Kubernetes
 kubectl port-forward service/genesis-rodriguez-34-service 8080:30001 -n genesis-rodriguez-34-namespace
 
-# Probar endpoints con curl (en otra terminal)
-curl http://localhost:8080/api/v1/face-detection
-curl http://localhost:8080/api/v1/face-analysis
 
-# ─────────────────────────────────────────────
-# COMANDOS ÚTILES
+# ✅ ENTORNO NUBE - Killercoda (kubectl directo, sin minikube)
 # ─────────────────────────────────────────────
 
-# Ver logs de un pod
-kubectl logs -f <nombre-del-pod> -n genesis-rodriguez-34-namespace
+# ingresar a la carpeta de los manifiestos de kubernetes (manifest)
+cd manifest
 
-# Describir un pod (útil para errores)
-kubectl describe pod <nombre-del-pod> -n genesis-rodriguez-34-namespace
+# listar namespace
+kubectl get namespace
+kubectl get ns
 
-# Eliminar todos los recursos del namespace
-kubectl delete all --all -n genesis-rodriguez-34-namespace
+# crear namespace
+kubectl apply -f genesis-rodriguez-34-namespace.yml
+
+# consultar namespace en uso
+kubectl config view --minify | grep namespace
+
+# cambiar namespace en uso a "genesis-rodriguez-34-namespace"
+kubectl config set-context --current --namespace=genesis-rodriguez-34-namespace
+
+# aplicar manifiestos en orden
+kubectl apply -f genesis-rodriguez-34-secret.yml
+kubectl apply -f genesis-rodriguez-34-configmap.yml
+kubectl apply -f genesis-rodriguez-34-service.yml
+kubectl apply -f genesis-rodriguez-34-deployment.yml
+
+# consultar todos los recursos del namespace
+kubectl get all -n genesis-rodriguez-34-namespace
+
+# consultar todos los recursos y secret del namespace
+kubectl get all,secrets -n genesis-rodriguez-34-namespace
+
+# probar el microservicio dentro del clúster con curl
+curl http://localhost:30001/api/v1/face-detection
+curl http://localhost:30001/api/v1/face-analysis
