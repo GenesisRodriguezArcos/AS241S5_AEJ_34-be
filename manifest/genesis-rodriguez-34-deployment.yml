@@ -18,7 +18,7 @@ spec:
           image: genesis2006/genesis-be:1.0        # Imagen en Docker Hub
           imagePullPolicy: IfNotPresent            # Evitar traer siempre la última versión si hay una actual
           ports:
-            - containerPort: 8080
+            - containerPort: 8085
           envFrom:
             - secretRef:
                 name: genesis-rodriguez-34-secret      # Credenciales en Base64
