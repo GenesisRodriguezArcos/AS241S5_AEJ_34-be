@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: genesis-rodriguez-34-deployment
+  namespace: genesis-rodriguez-34-namespace
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: genesis-rodriguez-34-deployment        # Debe coincidir con las etiquetas del Service
+  template:
+    metadata:
+      labels:
+        app: genesis-rodriguez-34-deployment      # Debe coincidir con las etiquetas del Service
+    spec:
+      containers:
+        - name: genesis-rodriguez-34-container
+          image: genesis2006/genesis-be:1.0        # Imagen en Docker Hub
+          imagePullPolicy: IfNotPresent            # Evitar traer siempre la última versión si hay una actual
+          ports:
+            - containerPort: 8080
+          envFrom:
+            - secretRef:
+                name: genesis-rodriguez-34-secret      # Credenciales en Base64
+            - configMapRef:
+                name: genesis-rodriguez-34-configmap   # Variables en texto plano

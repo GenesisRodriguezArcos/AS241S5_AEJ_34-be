@@ -1,0 +1,78 @@
+# ✅ ENTORNO LOCAL - Docker Desktop
+# Asegúrate de tener Docker Desktop abierto y Kubernetes habilitado en Settings > Kubernetes
+
+# ─────────────────────────────────────────────
+# 1. NAMESPACE - Crear el espacio de trabajo
+# ─────────────────────────────────────────────
+kubectl apply -f genesis-rodriguez-34-namespace.yml
+
+# Verificar
+kubectl get namespace
+
+# Cambiar al namespace del proyecto
+kubectl config set-context --current --namespace=genesis-rodriguez-34-namespace
+
+# Consultar namespace activo | LINUX
+kubectl config view --minify | grep namespace
+
+# Consultar namespace activo | WINDOWS
+kubectl config view --minify | findstr namespace
+
+# ─────────────────────────────────────────────
+# 2. SECRET - Credenciales en Base64
+# ─────────────────────────────────────────────
+kubectl apply -f genesis-rodriguez-34-secret.yml
+
+# Verificar
+kubectl get secrets -n genesis-rodriguez-34-namespace
+
+# ─────────────────────────────────────────────
+# 3. CONFIGMAP - Variables en texto plano
+# ─────────────────────────────────────────────
+kubectl apply -f genesis-rodriguez-34-configmap.yml
+
+# Verificar
+kubectl get configmap -n genesis-rodriguez-34-namespace
+
+# ─────────────────────────────────────────────
+# 4. SERVICE - Manejo y asignación de puertos
+# ─────────────────────────────────────────────
+kubectl apply -f genesis-rodriguez-34-service.yml
+
+# Verificar
+kubectl get service -n genesis-rodriguez-34-namespace
+
+# ─────────────────────────────────────────────
+# 5. DEPLOYMENT - Despliegue de la aplicación
+# ─────────────────────────────────────────────
+kubectl apply -f genesis-rodriguez-34-deployment.yml
+
+# Verificar pods corriendo
+kubectl get pods -n genesis-rodriguez-34-namespace
+
+# Consultar todos los recursos y secrets del namespace
+kubectl get all,secrets -n genesis-rodriguez-34-namespace
+
+# ─────────────────────────────────────────────
+# 6. PROBAR EL MICROSERVICIO
+# ─────────────────────────────────────────────
+
+# Crear túnel entre tu máquina local y el clúster
+kubectl port-forward service/genesis-rodriguez-34-service 8080:30001 -n genesis-rodriguez-34-namespace
+
+# Probar endpoints con curl (en otra terminal)
+curl http://localhost:8080/api/v1/face-detection
+curl http://localhost:8080/api/v1/face-analysis
+
+# ─────────────────────────────────────────────
+# COMANDOS ÚTILES
+# ─────────────────────────────────────────────
+
+# Ver logs de un pod
+kubectl logs -f <nombre-del-pod> -n genesis-rodriguez-34-namespace
+
+# Describir un pod (útil para errores)
+kubectl describe pod <nombre-del-pod> -n genesis-rodriguez-34-namespace
+
+# Eliminar todos los recursos del namespace
+kubectl delete all --all -n genesis-rodriguez-34-namespace

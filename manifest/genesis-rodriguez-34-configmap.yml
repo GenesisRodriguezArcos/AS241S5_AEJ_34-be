@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: genesis-rodriguez-34-configmap
+  namespace: genesis-rodriguez-34-namespace
+data:
+  SERVER_PORT: "8080"
+  SPRING_APPLICATION_NAME: "genesis"
+  RAPIDAPI_FACE_DETECTION_URL: "https://face-detection14.p.rapidapi.com/v1/results"
+  RAPIDAPI_FACE_DETECTION_HOST: "face-detection14.p.rapidapi.com"
+  RAPIDAPI_FACE_ANALYZER_HOST: "faceanalyzer-ai.p.rapidapi.com"
+  RAPIDAPI_FACE_ANALYZER_URL: "https://faceanalyzer-ai.p.rapidapi.com"
