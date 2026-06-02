@@ -3,10 +3,12 @@ name: Docker Hub
 on:
   push:
     branches:
-      - develop # puedes añadir más ramas
+      - develop
+      - main # puedes añadir más ramas
   pull_request:
     branches:
-      - develop # puedes añadir más ramas
+      - develop
+      - main  # puedes añadir más ramas
   schedule:
     # Ejecutar todos los días a las 8:00 AM hora Perú (UTC-5) → 1:00 PM UTC
     - cron: '0 13 * * *'
